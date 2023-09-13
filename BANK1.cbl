@@ -96,29 +96,28 @@
 
            DISPLAY BLANK-SCREEN.
 
-           DISPLAY (2 26) "Cajero Automatico UnizarBank"
+           DISPLAY "Cajero Automatico UnizarBank" LINE 2 COL 26
                WITH FOREGROUND-COLOR IS BLUE.
 
            MOVE FUNCTION CURRENT-DATE TO CAMPOS-FECHA.
 
-           DISPLAY (4 32) DIA.
-           DISPLAY (4 34) "-".
-           DISPLAY (4 35) MES.
-           DISPLAY (4 37) "-".
-           DISPLAY (4 38) ANO.
-           DISPLAY (4 44) HORAS.
-           DISPLAY (4 46) ":".
-           DISPLAY (4 47) MINUTOS.
+           DISPLAY DIA LINE 4 COL 32.
+           DISPLAY "-" LINE 4 COL 34.
+           DISPLAY MES LINE 4 COL 35.
+           DISPLAY "-" LINE 4 COL 37.
+           DISPLAY ANO LINE 4 COL 38.
+           DISPLAY HORAS LINE 4 COL 44.
+           DISPLAY ":" LINE 4 COL 46.
+           DISPLAY MINUTOS LINE 4 COL 47.
 
 
        P1.
-           DISPLAY (8 28) "Bienvenido a UnizarBank".
-           DISPLAY (10 18) "Por favor, introduzca la tarjeta para operar".
-
-           DISPLAY (24 33) "Enter - Aceptar".
+           DISPLAY "Bienvenido a UnizarBank" LINE 8 COL 28.
+           DISPLAY "Por favor,introduzca la tarjeta para operar" LINE 10 COL 18.
+           DISPLAY "Enter - Aceptar" LINE 24 COL 33.
 
        P1-ENTER.
-           ACCEPT (24 80) CHOICE ON EXCEPTION
+           ACCEPT CHOICE LINE 24 COL 80 ON EXCEPTION
            IF ENTER-PRESSED
                GO TO P2
            ELSE
@@ -127,12 +126,12 @@
 
        P2.
            PERFORM IMPRIMIR-CABECERA THRU IMPRIMIR-CABECERA.
-           DISPLAY (24 33) "ESC - Salir".
+           DISPLAY "ESC - Salir" LINE 24 COL 33.
            INITIALIZE TNUM.
            INITIALIZE PIN-INTRODUCIDO.
            INITIALIZE TPIN.
-           DISPLAY (8 15) "Numero de tarjeta:".
-           DISPLAY (9 15) "Inserte el pin de tarjeta:".
+           DISPLAY "Numero de tarjeta:" LINE 8 COL 15.
+           DISPLAY "Inserte el pin de tarjeta:" LINE 9 COL 15.
            ACCEPT DATA-ACCEPT ON EXCEPTION
                IF ESC-PRESSED
                    GO TO IMPRIMIR-CABECERA
@@ -164,17 +163,17 @@
            CLOSE INTENTOS.
 
            PERFORM IMPRIMIR-CABECERA THRU IMPRIMIR-CABECERA.
-           DISPLAY (8 15) "1 - Consultar saldo".
-           DISPLAY (9 15) "2 - Consultar movimientos".
-           DISPLAY (10 15) "3 - Retirar efectivo".
-           DISPLAY (11 15) "4 - Ingresar efectivo".
-           DISPLAY (12 15) "5 - Ordenar transferencia".
-           DISPLAY (13 15) "6 - Comprar entradas de espectaculos".
-           DISPLAY (15 15) "7 - Cambiar clave".
-           DISPLAY (24 34) "ESC - Salir".
+           DISPLAY "1 - Consultar saldo" LINE 8 COL 15.
+           DISPLAY "2 - Consultar movimientos" LINE 9 COL 15.
+           DISPLAY "3 - Retirar efectivo" LINE 10 COL 15.
+           DISPLAY "4 - Ingresar efectivo" LINE 11 COL 15.
+           DISPLAY "5 - Ordenar transferencia" LINE 12 COL 15.
+           DISPLAY "6 - Comprar entradas de espectaculos" LINE 13 COL 15.
+           DISPLAY "7 - Cambiar clave" LINE 15 COL 15.
+           DISPLAY "ESC - Salir" LINE 24 COL 34.
 
        PMENUA1.
-           ACCEPT (24 80) CHOICE ON EXCEPTION
+           ACCEPT CHOICE LINE 24 COL 80 ON EXCEPTION
                IF ESC-PRESSED
                    GO TO IMPRIMIR-CABECERA
                ELSE
@@ -218,13 +217,13 @@
            CLOSE INTENTOS.
 
            PERFORM IMPRIMIR-CABECERA THRU IMPRIMIR-CABECERA.
-           DISPLAY (9 25) "Ha ocurrido un error interno"
+           DISPLAY "Ha ocurrido un error interno" LINE 9 COL 25
                WITH FOREGROUND-COLOR IS BLACK
                     BACKGROUND-COLOR IS RED.
-           DISPLAY (11 32) "Vuelva mas tarde"
+           DISPLAY "Vuelva mas tarde" LINE 11 COL 32
                WITH FOREGROUND-COLOR IS BLACK
                     BACKGROUND-COLOR IS RED.
-           DISPLAY (24 33) "Enter - Aceptar".
+           DISPLAY "Enter - Aceptar" LINE 24 COL 33.
            GO TO PINT-ERR-ENTER.
 
 
@@ -234,19 +233,19 @@
            CLOSE INTENTOS.
 
            PERFORM IMPRIMIR-CABECERA THRU IMPRIMIR-CABECERA.
-           DISPLAY "(9 20) Se ha sobrepasado el numero de intentos"
+           DISPLAY "Se ha sobrepasado el nº de intentos" LINE 9 COL 20
                WITH FOREGROUND-COLOR IS BLACK
                     BACKGROUND-COLOR IS RED.
-           DISPLAY (11 18) "Por su seguridad se ha bloqueado la tarjeta"
+           DISPLAY "Por su seguridad se ha bloqueado la tarjeta" LINE 11 COL 18
                WITH FOREGROUND-COLOR IS BLACK
                     BACKGROUND-COLOR IS RED.
-           DISPLAY (12 30) "Acuda a una sucursal"
+           DISPLAY "Acuda a una sucursal" LINE 11 COL 30
                WITH FOREGROUND-COLOR IS BLACK
                     BACKGROUND-COLOR IS RED.
-           DISPLAY (24 33) "Enter - Aceptar".
+           DISPLAY "Enter - Aceptar" LINE 24 COL 33.
 
        PINT-ERR-ENTER.
-           ACCEPT (24 80) CHOICE ON EXCEPTION
+           ACCEPT CHOICE LINE 24 COL 80 ON EXCEPTION
            IF ENTER-PRESSED
                GO TO IMPRIMIR-CABECERA
            ELSE
@@ -261,25 +260,25 @@
            CLOSE INTENTOS.
 
            PERFORM IMPRIMIR-CABECERA THRU IMPRIMIR-CABECERA.
-           DISPLAY (9 26) "El codigo PIN es incorrecto"
+           DISPLAY "El codigo PIN es incorrecto" LINE 9 COL 26
                WITH FOREGROUND-COLOR IS BLACK
                     BACKGROUND-COLOR IS RED.
-           DISPLAY (11 30) "Le quedan "
+           DISPLAY "Le quedan " LINE 11 COL 30
                WITH FOREGROUND-COLOR IS BLACK
                     BACKGROUND-COLOR IS RED.
-           DISPLAY (11 40) IINTENTOS
+           DISPLAY IINTENTOS LINE 11 COL 40
                WITH FOREGROUND-COLOR IS BLACK
                     BACKGROUND-COLOR IS RED.
-           DISPLAY (11 42) " intentos"
+           DISPLAY " intentos" LINE 11 COL 42
 
                WITH FOREGROUND-COLOR IS BLACK
                     BACKGROUND-COLOR IS RED.
 
-           DISPLAY (24 1) "Enter - Aceptar".
-           DISPLAY (24 65) "ESC - Cancelar".
+           DISPLAY "Enter - Aceptar" LINE 24 COL 1.
+           DISPLAY "ESC - Cancelar" LINE 24 COL 65.
 
        PPIN-ERR-ENTER.
-           ACCEPT (24 80) CHOICE ON EXCEPTION
+           ACCEPT CHOICE LINE 24 COL 80 ON EXCEPTION
            IF ENTER-PRESSED
                GO TO P2
            ELSE
