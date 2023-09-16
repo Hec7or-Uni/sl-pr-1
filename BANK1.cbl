@@ -25,14 +25,14 @@
        FILE SECTION.
        FD TARJETAS
            LABEL RECORD STANDARD
-           VALUE OF FILE-ID IS "tarjetas.ubd".
+           VALUE OF FILE-ID IS "./../tarjetas.ubd".
        01 TAJETAREG.
            02 TNUM      PIC 9(16).
            02 TPIN      PIC  9(4).
 
        FD INTENTOS
            LABEL RECORD STANDARD
-           VALUE OF FILE-ID IS "intentos.ubd".
+           VALUE OF FILE-ID IS "./../intentos.ubd".
        01 INTENTOSREG.
            02 INUM      PIC 9(16).
            02 IINTENTOS PIC 9(1).
@@ -50,6 +50,7 @@
        78 MAGENTA VALUE 5.
        78 YELLOW  VALUE 6.
        78 WHITE   VALUE 7.
+       78 GREY    VALUE 8.
 
        01 CAMPOS-FECHA.
            05 FECHA.
@@ -117,7 +118,7 @@
            DISPLAY "Enter - Aceptar" LINE 24 COL 33.
 
        P1-ENTER.
-           ACCEPT CHOICE LINE 24 COL 80 ON EXCEPTION
+           ACCEPT CHOICE LINE 25 COL 80 ON EXCEPTION
            IF ENTER-PRESSED
                GO TO P2
            ELSE
@@ -221,7 +222,7 @@
                WITH FOREGROUND-COLOR IS WHITE
                     BACKGROUND-COLOR IS RED.
            DISPLAY "Vuelva mas tarde" LINE 11 COL 32
-               WITH FOREGROUND-COLOR IS BLACK
+               WITH FOREGROUND-COLOR IS WHITE
                     BACKGROUND-COLOR IS RED.
            DISPLAY "Enter - Aceptar" LINE 24 COL 33.
            GO TO PINT-ERR-ENTER.
@@ -234,13 +235,13 @@
 
            PERFORM IMPRIMIR-CABECERA THRU IMPRIMIR-CABECERA.
            DISPLAY "Se ha sobrepasado el nº de intentos" LINE 9 COL 20
-               WITH FOREGROUND-COLOR IS BLACK
+               WITH FOREGROUND-COLOR IS WHITE
                     BACKGROUND-COLOR IS RED.
            DISPLAY "Por su seguridad se ha bloqueado la tarjeta" LINE 11 COL 18
-               WITH FOREGROUND-COLOR IS BLACK
+               WITH FOREGROUND-COLOR IS WHITE
                     BACKGROUND-COLOR IS RED.
            DISPLAY "Acuda a una sucursal" LINE 11 COL 30
-               WITH FOREGROUND-COLOR IS BLACK
+               WITH FOREGROUND-COLOR IS WHITE
                     BACKGROUND-COLOR IS RED.
            DISPLAY "Enter - Aceptar" LINE 24 COL 33.
 

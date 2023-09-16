@@ -25,13 +25,13 @@
        FILE SECTION.
        FD TARJETAS
            LABEL RECORD STANDARD
-           VALUE OF FILE-ID IS "tarjetas.ubd".
+           VALUE OF FILE-ID IS "./../tarjetas.ubd".
        01 TAJETAREG.
            02 TNUM-E      PIC 9(16).
            02 TPIN-E      PIC  9(4).
        FD F-MOVIMIENTOS
            LABEL RECORD STANDARD
-           VALUE OF FILE-ID IS "movimientos.ubd".
+           VALUE OF FILE-ID IS "./../movimientos.ubd".
        01 MOVIMIENTO-REG.
            02 MOV-NUM              PIC  9(35).
            02 MOV-TARJETA          PIC  9(16).
