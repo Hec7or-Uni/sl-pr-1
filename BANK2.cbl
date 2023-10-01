@@ -8,18 +8,17 @@
 
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.
-           SELECT F-MOVIMIENTOS ASSIGN TO DISK
+           SELECT OPTIONAL F-MOVIMIENTOS ASSIGN TO DISK
            ORGANIZATION IS INDEXED
            ACCESS MODE IS DYNAMIC
            RECORD KEY IS MOV-NUM
            FILE STATUS IS FSM.
 
-
        DATA DIVISION.
        FILE SECTION.
        FD F-MOVIMIENTOS
            LABEL RECORD STANDARD
-           VALUE OF FILE-ID IS "./../movimientos.ubd".
+           VALUE OF FILE-ID IS "../data/movimientos.ubd".
        01 MOVIMIENTO-REG.
            02 MOV-NUM               PIC  9(35).
            02 MOV-TARJETA           PIC  9(16).
@@ -34,7 +33,6 @@
            02 MOV-CONCEPTO          PIC  X(35).
            02 MOV-SALDOPOS-ENT      PIC  S9(9).
            02 MOV-SALDOPOS-DEC      PIC   9(2).
-
 
        WORKING-STORAGE SECTION.
        77 FSM                       PIC   X(2).
@@ -84,8 +82,6 @@
            05 SALDO-DEC LINE 12 COL 42 PIC 99 FROM MOV-SALDOPOS-DEC.
            05 MONEDA LINE 12 COL 45 VALUE "EUR".
 
-
-
        PROCEDURE DIVISION USING TNUM.
        IMPRIMIR-CABECERA.
 
@@ -112,7 +108,6 @@
                GO TO PSYS-ERR.
 
            MOVE 0 TO LAST-MOV-NUM.
-
 
        LECTURA-MOV.
            READ F-MOVIMIENTOS NEXT RECORD AT END GO LAST-MOV-FOUND.
@@ -168,7 +163,7 @@
            DISPLAY "Enter - Aceptar" LINE 24 COL 33.
 
        EXIT-ENTER.
-           ACCEPT PRESSED-KEY LINE 24 COL 80
+           ACCEPT PRESSED-KEY WITH NO ECHO LINE 24 COL 80
            IF ENTER-PRESSED
                EXIT PROGRAM
            ELSE

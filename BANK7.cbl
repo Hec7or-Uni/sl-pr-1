@@ -8,7 +8,7 @@
 
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.
-           SELECT F-MOVIMIENTOS ASSIGN TO DISK
+           SELECT OPTIONAL F-MOVIMIENTOS ASSIGN TO DISK
            ORGANIZATION IS INDEXED
            ACCESS MODE IS DYNAMIC
            RECORD KEY IS MOV-NUM
@@ -20,12 +20,11 @@
            RECORD KEY IS ESP-NUM
            FILE STATUS IS FSE.
 
-
        DATA DIVISION.
        FILE SECTION.
        FD F-MOVIMIENTOS
            LABEL RECORD STANDARD
-           VALUE OF FILE-ID IS "./../movimientos.ubd".
+           VALUE OF FILE-ID IS "../data/movimientos.ubd".
        01 MOVIMIENTO-REG.
            02 MOV-NUM               PIC  9(35).
            02 MOV-TARJETA           PIC  9(16).
@@ -43,7 +42,7 @@
 
        FD F-ESPECTACULOS
            LABEL RECORD STANDARD
-           VALUE OF FILE-ID IS "espectaculos.ubd".
+           VALUE OF FILE-ID IS "../data/espectaculos.ubd".
        01 ESPECTACULO-REG.
            02 ESP-NUM               PIC   9(4).
            02 ESP-ANO               PIC   9(4).
@@ -109,7 +108,6 @@
        77 SALDO-POST-ENT            PIC  S9(9).
        77 SALDO-POST-DEC            PIC   9(2).
 
-
        01 TABLA.
            05 REGISTROS-EN-PANTALLA PIC  9(35) OCCURS 15 TIMES.
 
@@ -122,7 +120,6 @@
 
        LINKAGE SECTION.
        77 TNUM                      PIC  9(16).
-
 
        SCREEN SECTION.
        01 BLANK-SCREEN.
@@ -232,7 +229,6 @@
            05 FILLER SIGN IS LEADING SEPARATE LINE 12 COL 47
                PIC S9(9) FROM SALDO-POST-ENT.
 
-
        PROCEDURE DIVISION USING TNUM.
        IMPRIMIR-CABECERA.
 
@@ -312,7 +308,6 @@
            OPEN I-O F-ESPECTACULOS.
            IF FSE <> 30
                GO TO PSYS-ERR.
-
 
        LEER-PRIMEROS.
            READ F-ESPECTACULOS NEXT RECORD AT END GO WAIT-ORDER.
@@ -430,7 +425,7 @@
            DISPLAY "ESC - Cancelar" LINE 24 COL 66.
 
        SALDO-SUF-ENTER.
-           ACCEPT PRESSED-KEY LINE 24 COL 80
+           ACCEPT PRESSED-KEY WITH NO ECHO LINE 24 COL 80
            IF ENTER-PRESSED THEN
                GO TO GUARDAR-VENTA
            ELSE
@@ -489,7 +484,7 @@
            DISPLAY "Enter - Aceptar" LINE 24 COL 33.
 
        RECOGER-ENTER.
-           ACCEPT PRESSED-KEY LINE 24 COL 80
+           ACCEPT PRESSED-KEY WITH NO ECHO LINE 24 COL 80
            IF ENTER-PRESSED
                EXIT PROGRAM
            ELSE
@@ -518,7 +513,7 @@
            DISPLAY "Enter - Aceptar" LINE 24 COL 33.
 
        VENTA-ERR-ENTER.
-           ACCEPT PRESSED-KEY LINE 24 COL 80
+           ACCEPT PRESSED-KEY WITH NO ECHO LINE 24 COL 80
            IF ENTER-PRESSED
                CLOSE F-MOVIMIENTOS
                CLOSE F-ESPECTACULOS
@@ -643,16 +638,14 @@
            DISPLAY "Enter - Aceptar" LINE 24 COL 33.
 
        EXIT-ENTER.
-           ACCEPT PRESSED-KEY LINE 24 COL 80
+           ACCEPT PRESSED-KEY WITH NO ECHO LINE 24 COL 80
            IF ENTER-PRESSED
                EXIT PROGRAM
            ELSE
                GO TO EXIT-ENTER.
 
-
        READ-MOVIMIENTO.
            READ F-MOVIMIENTOS INVALID KEY GO TO PSYS-ERR.
-
 
        MOSTRAR-ESPECTACULO.
 
@@ -664,7 +657,6 @@
            ELSE
                DISPLAY FILA-ESPECTACULO-IMPAR
            END-IF.
-
 
        FILTRADO.
 

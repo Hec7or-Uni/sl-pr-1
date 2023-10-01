@@ -8,18 +8,17 @@
 
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.
-           SELECT F-MOVIMIENTOS ASSIGN TO DISK
+           SELECT OPTIONAL F-MOVIMIENTOS ASSIGN TO DISK
            ORGANIZATION IS INDEXED
            ACCESS MODE IS DYNAMIC
            RECORD KEY IS MOV-NUM
            FILE STATUS IS FSM.
 
-
        DATA DIVISION.
        FILE SECTION.
        FD F-MOVIMIENTOS
            LABEL RECORD STANDARD
-           VALUE OF FILE-ID IS "./../movimientos.ubd".
+           VALUE OF FILE-ID IS "../data/movimientos.ubd".
        01 MOVIMIENTO-REG.
            02 MOV-NUM               PIC  9(35).
            02 MOV-TARJETA           PIC  9(16).
@@ -34,7 +33,6 @@
            02 MOV-CONCEPTO          PIC  X(35).
            02 MOV-SALDOPOS-ENT      PIC  S9(9).
            02 MOV-SALDOPOS-DEC      PIC   9(2).
-
 
        WORKING-STORAGE SECTION.
        77 FSM                       PIC   X(2).
@@ -84,12 +82,9 @@
        LINKAGE SECTION.
        77 TNUM                     PIC  9(16).
 
-
-
        SCREEN SECTION.
        01 BLANK-SCREEN.
            05 FILLER LINE 1 BLANK SCREEN BACKGROUND-COLOR BLACK.
-
 
        01 ENTRADA-USUARIO.
            05 FILLER BLANK ZERO AUTO UNDERLINE
@@ -111,9 +106,6 @@
            05 FILLER LINE 11 COL 53 PIC 99 FROM SALDO-USUARIO-DEC.
            05 FILLER LINE 11 COL 56 VALUE "EUR".
 
-
-
-
        PROCEDURE DIVISION USING TNUM.
        IMPRIMIR-CABECERA.
 
@@ -122,7 +114,6 @@
            DISPLAY BLANK-SCREEN.
            DISPLAY "Cajero Automatico UnizarBank" LINE 2 COL 26
                WITH FOREGROUND-COLOR IS 1.
-
 
            MOVE FUNCTION CURRENT-DATE TO CAMPOS-FECHA.
 
@@ -134,9 +125,6 @@
            DISPLAY HORAS LINE 4 COL 44.
            DISPLAY ":" LINE 4 COL 46.
            DISPLAY MINUTOS LINE 4 COL 47.
-
-
-
 
        CONSULTA-ULTIMO-MOVIMIENTO SECTION.
            OPEN I-O F-MOVIMIENTOS.
@@ -155,9 +143,6 @@
 
        LAST-MOV-FOUND.
            CLOSE F-MOVIMIENTOS.
-
-
-
 
        CONSULTA-SALDO-USUARIO SECTION.
            OPEN INPUT F-MOVIMIENTOS.
@@ -202,9 +187,6 @@
 
            CLOSE F-MOVIMIENTOS.
 
-
-
-
        PANTALLA-RETIRADA SECTION.
            INITIALIZE EURENT-USUARIO.
            INITIALIZE EURDEC-USUARIO.
@@ -236,9 +218,6 @@
                    WITH BACKGROUND-COLOR RED
                GO TO PANTALLA-RETIRADA
            END-IF.
-
-
-
 
        INSERTAR-MOVIMIENTO SECTION.
 
@@ -275,8 +254,6 @@
            WRITE MOVIMIENTO-REG INVALID KEY GO TO PSYS-ERR.
            CLOSE F-MOVIMIENTOS.
 
-
-
        FINALIZACION SECTION.
            PERFORM IMPRIMIR-CABECERA THRU IMPRIMIR-CABECERA.
            DISPLAY "Retirar efectivo" LINE 8 COL 30.
@@ -288,9 +265,6 @@
            DISPLAY "Enter - Aceptar" LINE 24 COL 33.
 
            GO TO EXIT-ENTER.
-
-
-
 
        PSYS-ERR.
 
@@ -306,7 +280,7 @@
            DISPLAY "Enter - Aceptar" LINE 24 COL 33.
 
        EXIT-ENTER.
-           ACCEPT PRESSED-KEY LINE 24 COL 80
+           ACCEPT PRESSED-KEY WITH NO ECHO LINE 24 COL 80
            IF ENTER-PRESSED
                EXIT PROGRAM
            ELSE

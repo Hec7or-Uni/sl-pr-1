@@ -20,27 +20,75 @@
            RECORD KEY IS INUM
            FILE STATUS IS FSI.
 
+           SELECT F-MOVIMIENTOS ASSIGN TO DISK
+           ORGANIZATION IS INDEXED
+           ACCESS MODE IS DYNAMIC
+           RECORD KEY IS MOV-NUM
+           FILE STATUS IS FSM.
+
+           SELECT OPTIONAL F-TRANSFERENCIAS ASSIGN TO DISK
+           ORGANIZATION IS INDEXED
+           ACCESS MODE IS DYNAMIC
+           RECORD KEY IS TR-NUM
+           FILE STATUS IS FSTR.
+
+
 
        DATA DIVISION.
        FILE SECTION.
        FD TARJETAS
            LABEL RECORD STANDARD
-           VALUE OF FILE-ID IS "./../tarjetas.ubd".
+           VALUE OF FILE-ID IS "../data/tarjetas.ubd".
        01 TAJETAREG.
            02 TNUM      PIC 9(16).
            02 TPIN      PIC  9(4).
 
        FD INTENTOS
            LABEL RECORD STANDARD
-           VALUE OF FILE-ID IS "./../intentos.ubd".
+           VALUE OF FILE-ID IS "../data/intentos.ubd".
        01 INTENTOSREG.
            02 INUM      PIC 9(16).
            02 IINTENTOS PIC 9(1).
+
+       FD F-MOVIMIENTOS
+           LABEL RECORD STANDARD
+           VALUE OF FILE-ID IS "../data/movimientos.ubd".
+       01 MOVIMIENTO-REG.
+           02 MOV-NUM              PIC  9(35).
+           02 MOV-TARJETA          PIC  9(16).
+           02 MOV-ANO              PIC   9(4).
+           02 MOV-MES              PIC   9(2).
+           02 MOV-DIA              PIC   9(2).
+           02 MOV-HOR              PIC   9(2).
+           02 MOV-MIN              PIC   9(2).
+           02 MOV-SEG              PIC   9(2).
+           02 MOV-IMPORTE-ENT      PIC  S9(7).
+           02 MOV-IMPORTE-DEC      PIC   9(2).
+           02 MOV-CONCEPTO         PIC  X(35).
+           02 MOV-SALDOPOS-ENT     PIC  S9(9).
+           02 MOV-SALDOPOS-DEC     PIC   9(2).
+
+       FD F-TRANSFERENCIAS
+           LABEL RECORD STANDARD
+           VALUE OF FILE-ID IS "../data/transferencias.ubd".
+       01 TRANSFE-REG.
+           02 TR-NUM               PIC  9(35).
+           02 TR-ORIGEN            PIC  9(16).
+           02 TR-DESTINO           PIC  9(16).
+           02 TR-IMPORTE-ENT       PIC  S9(7).
+           02 TR-IMPORTE-DEC       PIC   9(2).
+      *    TR-CONCEPTO = {Transferencia programada, Transferencia periodica}
+           02 TR-CONCEPTO          PIC   X(35).
+           02 TR-ANO               PIC   9(4).
+           02 TR-MES               PIC   9(2).
+           02 TR-DIA               PIC   9(2).
 
 
        WORKING-STORAGE SECTION.
        77 FST                      PIC  X(2).
        77 FSI                      PIC  X(2).
+       77 FSM                      PIC  X(2).
+       77 FSTR                     PIC  X(2).
 
        78 BLACK   VALUE 0.
        78 BLUE    VALUE 1.
@@ -87,8 +135,6 @@
            05 PIN-ACCEPT BLANK ZERO SECURE LINE 09 COL 50
                PIC 9(4) USING PIN-INTRODUCIDO.
 
-
-
        PROCEDURE DIVISION.
        IMPRIMIR-CABECERA.
 
@@ -111,19 +157,17 @@
            DISPLAY ":" LINE 4 COL 46.
            DISPLAY MINUTOS LINE 4 COL 47.
 
-
        P1.
            DISPLAY "Bienvenido a UnizarBank" LINE 8 COL 28.
-           DISPLAY "Por favor,introduzca la tarjeta para operar" LINE 10 COL 18.
+           DISPLAY "Introduzca su tarjeta para operar" LINE 10 COL 24.
            DISPLAY "Enter - Aceptar" LINE 24 COL 33.
 
        P1-ENTER.
-           ACCEPT CHOICE LINE 25 COL 80 ON EXCEPTION
+           ACCEPT CHOICE WITH NO ECHO LINE 25 COL 80 ON EXCEPTION
            IF ENTER-PRESSED
                GO TO P2
            ELSE
                GO TO P1-ENTER.
-
 
        P2.
            PERFORM IMPRIMIR-CABECERA THRU IMPRIMIR-CABECERA.
@@ -133,7 +177,7 @@
            INITIALIZE TPIN.
            DISPLAY "Numero de tarjeta:" LINE 8 COL 15.
            DISPLAY "Inserte el pin de tarjeta:" LINE 9 COL 15.
-           ACCEPT DATA-ACCEPT ON EXCEPTION
+           ACCEPT DATA-ACCEPT WITH NO ECHO ON EXCEPTION
                IF ESC-PRESSED
                    GO TO IMPRIMIR-CABECERA
                ELSE
@@ -174,12 +218,11 @@
            DISPLAY "ESC - Salir" LINE 24 COL 34.
 
        PMENUA1.
-           ACCEPT CHOICE LINE 24 COL 80 ON EXCEPTION
+           ACCEPT CHOICE WITH NO ECHO LINE 24 COL 80 ON EXCEPTION
                IF ESC-PRESSED
                    GO TO IMPRIMIR-CABECERA
                ELSE
                    GO TO PMENUA1.
-
 
            IF CHOICE = 1
                CALL "BANK2" USING TNUM
@@ -211,7 +254,6 @@
 
            GO TO PMENU.
 
-
        PSYS-ERR.
 
            CLOSE TARJETAS.
@@ -226,7 +268,6 @@
                     BACKGROUND-COLOR IS RED.
            DISPLAY "Enter - Aceptar" LINE 24 COL 33.
            GO TO PINT-ERR-ENTER.
-
 
        PINT-ERR.
 
@@ -251,7 +292,6 @@
                GO TO IMPRIMIR-CABECERA
            ELSE
                GO TO PINT-ERR-ENTER.
-
 
        PPIN-ERR.
            SUBTRACT 1 FROM IINTENTOS.
@@ -287,7 +327,6 @@
                    GO TO IMPRIMIR-CABECERA
                ELSE
                    GO TO PPIN-ERR-ENTER.
-
 
        REINICIAR-INTENTOS.
            MOVE 3 TO IINTENTOS.

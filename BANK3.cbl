@@ -8,18 +8,17 @@
 
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.
-           SELECT F-MOVIMIENTOS ASSIGN TO DISK
+           SELECT OPTIONAL F-MOVIMIENTOS ASSIGN TO DISK
            ORGANIZATION IS INDEXED
            ACCESS MODE IS DYNAMIC
            RECORD KEY IS MOV-NUM
            FILE STATUS IS FSM.
 
-
        DATA DIVISION.
        FILE SECTION.
        FD F-MOVIMIENTOS
            LABEL RECORD STANDARD
-           VALUE OF FILE-ID IS "./../movimientos.ubd".
+           VALUE OF FILE-ID IS "../data/movimientos.ubd".
        01 MOVIMIENTO-REG.
            02 MOV-NUM               PIC  9(35).
            02 MOV-TARJETA           PIC  9(16).
@@ -34,7 +33,6 @@
            02 MOV-CONCEPTO          PIC  X(35).
            02 MOV-SALDOPOS-ENT      PIC  S9(9).
            02 MOV-SALDOPOS-DEC      PIC   9(2).
-
 
        WORKING-STORAGE SECTION.
        77 FSM                       PIC   X(2).
@@ -102,7 +100,6 @@
 
        LINKAGE SECTION.
        77 TNUM                      PIC  9(16).
-
 
        SCREEN SECTION.
        01 BLANK-SCREEN.
@@ -216,7 +213,6 @@
            05 MOV-SALDOPOS-DEC-IMPAR LINE LINEA-MOV-ACTUAL COL 78
                PIC 99 FROM MOV-SALDOPOS-DEC.
 
-
        PROCEDURE DIVISION USING TNUM.
        IMPRIMIR-CABECERA.
 
@@ -316,7 +312,6 @@
            MOVE 0 TO MOV-EN-PANTALLA.
            MOVE 7 TO LINEA-MOV-ACTUAL.
 
-
        LEER-PRIMEROS.
            READ F-MOVIMIENTOS PREVIOUS RECORD AT END GO WAIT-ORDER.
                MOVE 1 TO MOV-VALIDO.
@@ -338,7 +333,7 @@
 
        WAIT-ORDER.
 
-           ACCEPT PRESSED-KEY LINE 24 COL 80 ON EXCEPTION
+           ACCEPT PRESSED-KEY WITH NO ECHO LINE 24 COL 80 ON EXCEPTION
 
               IF ESC-PRESSED THEN
                   CLOSE F-MOVIMIENTOS
@@ -473,12 +468,11 @@
            DISPLAY "Enter - Aceptar" LINE 24 COL 33.
 
        EXIT-ENTER.
-           ACCEPT PRESSED-KEY LINE 24 COL 80
+           ACCEPT PRESSED-KEY WITH NO ECHO LINE 24 COL 80
            IF ENTER-PRESSED
                EXIT PROGRAM
            ELSE
                GO TO EXIT-ENTER.
-
 
        FILTRADO.
 

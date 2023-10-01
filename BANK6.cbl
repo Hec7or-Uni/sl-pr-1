@@ -14,24 +14,23 @@
            RECORD KEY IS TNUM-E
            FILE STATUS IS FST.
 
-           SELECT F-MOVIMIENTOS ASSIGN TO DISK
+           SELECT OPTIONAL F-MOVIMIENTOS ASSIGN TO DISK
            ORGANIZATION IS INDEXED
            ACCESS MODE IS DYNAMIC
            RECORD KEY IS MOV-NUM
            FILE STATUS IS FSM.
 
-
        DATA DIVISION.
        FILE SECTION.
        FD TARJETAS
            LABEL RECORD STANDARD
-           VALUE OF FILE-ID IS "./../tarjetas.ubd".
+           VALUE OF FILE-ID IS "../data/tarjetas.ubd".
        01 TAJETAREG.
            02 TNUM-E      PIC 9(16).
            02 TPIN-E      PIC  9(4).
        FD F-MOVIMIENTOS
            LABEL RECORD STANDARD
-           VALUE OF FILE-ID IS "./../movimientos.ubd".
+           VALUE OF FILE-ID IS "../data/movimientos.ubd".
        01 MOVIMIENTO-REG.
            02 MOV-NUM              PIC  9(35).
            02 MOV-TARJETA          PIC  9(16).
@@ -46,7 +45,6 @@
            02 MOV-CONCEPTO         PIC  X(35).
            02 MOV-SALDOPOS-ENT     PIC  S9(9).
            02 MOV-SALDOPOS-DEC     PIC   9(2).
-
 
        WORKING-STORAGE SECTION.
        77 FST                      PIC   X(2).
@@ -124,7 +122,6 @@
            05 FILLER LINE 10 COL 41 VALUE ",".
            05 FILLER LINE 10 COL 42 PIC 99 FROM MOV-SALDOPOS-DEC.
            05 FILLER LINE 10 COL 45 VALUE "EUR".
-
 
        PROCEDURE DIVISION USING TNUM.
        INICIO.
@@ -257,7 +254,7 @@
            DISPLAY "ESC - Cancelar" LINE 24 COL 66.
 
        ENTER-VERIFICACION.
-           ACCEPT PRESSED-KEY LINE 24 COL 80 ON EXCEPTION
+           ACCEPT PRESSED-KEY WITH NO ECHO LINE 24 COL 80 ON EXCEPTION
            IF ESC-PRESSED THEN
                EXIT PROGRAM
            ELSE
@@ -266,7 +263,7 @@
 
        VERIFICACION-CTA-CORRECTA.
            OPEN I-O TARJETAS.
-           IF FST <> 30
+           IF FST <> 00
               GO TO PSYS-ERR.
 
            MOVE CUENTA-DESTINO TO TNUM-E.
@@ -373,7 +370,7 @@
            DISPLAY "Enter - Aceptar" LINE 24 COL 33.
 
        EXIT-ENTER.
-           ACCEPT PRESSED-KEY LINE 24 COL 80
+           ACCEPT PRESSED-KEY WITH NO ECHO LINE 24 COL 80
            IF ENTER-PRESSED
                EXIT PROGRAM
            ELSE
