@@ -183,11 +183,13 @@
                ELSE
                    GO TO P2.
 
+           CLOSE TARJETAS.
            OPEN I-O TARJETAS.
            IF FST NOT = 00
                GO TO PSYS-ERR.
            READ TARJETAS INVALID KEY GO TO PSYS-ERR.
 
+           CLOSE INTENTOS.
            OPEN I-O INTENTOS.
            IF FSI NOT = 00
                GO TO PSYS-ERR.
@@ -205,6 +207,17 @@
 
        PMENU.
            CLOSE TARJETAS.
+           CLOSE INTENTOS.
+
+           OPEN I-O INTENTOS.
+           IF FSI NOT = 00
+               GO TO PSYS-ERR.
+           MOVE TNUM TO INUM.
+           READ INTENTOS INVALID KEY GO TO PSYS-ERR.
+           IF IINTENTOS <= 0
+               CLOSE INTENTOS
+               PERFORM IMPRIMIR-CABECERA THRU IMPRIMIR-CABECERA
+               GO TO P1.
            CLOSE INTENTOS.
 
            PERFORM IMPRIMIR-CABECERA THRU IMPRIMIR-CABECERA.
@@ -270,7 +283,8 @@
            GO TO PINT-ERR-ENTER.
 
        PINT-ERR.
-
+           CLOSE F-MOVIMIENTOS.
+           CLOSE F-TRANSFERENCIAS.
            CLOSE TARJETAS.
            CLOSE INTENTOS.
 
@@ -287,14 +301,16 @@
            DISPLAY "Enter - Aceptar" LINE 24 COL 33.
 
        PINT-ERR-ENTER.
-           ACCEPT CHOICE LINE 24 COL 80 ON EXCEPTION
+           ACCEPT CHOICE WITH NO ECHO LINE 24 COL 80 ON EXCEPTION
            IF ENTER-PRESSED
                GO TO IMPRIMIR-CABECERA
            ELSE
                GO TO PINT-ERR-ENTER.
 
        PPIN-ERR.
-           SUBTRACT 1 FROM IINTENTOS.
+           IF IINTENTOS > 0
+               SUBTRACT 1 FROM IINTENTOS.
+
            REWRITE INTENTOSREG INVALID KEY GO TO PSYS-ERR.
 
            CLOSE TARJETAS.

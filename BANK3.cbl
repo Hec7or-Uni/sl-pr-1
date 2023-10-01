@@ -499,8 +499,14 @@
            COMPUTE CENT-MIN = (EURENT1-USUARIO * 100)
                               + (EURDEC1-USUARIO).
 
+           IF MOV-CONCEPTO = "Transferimos" OR MOV-CONCEPTO = "Retirada"
+              MULTIPLY -1 BY MOV-IMPORTE-ENT.
+
            COMPUTE CENT-MOV = (MOV-IMPORTE-ENT * 100)
                               + (MOV-IMPORTE-DEC).
+
+           IF MOV-CONCEPTO = "Transferimos" OR MOV-CONCEPTO = "Retirada"
+              MULTIPLY -1 BY MOV-IMPORTE-ENT.
 
            COMPUTE CENT-MAX = (EURENT2-USUARIO * 100)
                               + (EURDEC2-USUARIO).
