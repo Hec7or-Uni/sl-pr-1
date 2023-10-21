@@ -74,8 +74,10 @@
        77 MES2-USUARIO              PIC   9(2).
        77 ANO2-USUARIO              PIC   9(4).
 
+       77 EURENT1-USUARIO-SIG       PIC   X(1) VALUE '+'.
        77 EURENT1-USUARIO           PIC  S9(7).
        77 EURDEC1-USUARIO           PIC   9(2).
+       77 EURENT2-USUARIO-SIG       PIC   X(1) VALUE '+'.
        77 EURENT2-USUARIO           PIC  S9(7).
        77 EURDEC2-USUARIO           PIC   9(2).
 
@@ -118,14 +120,21 @@
                LINE 13 COL 53 PIC 9(2) USING MES2-USUARIO.
            05 ANO-MAX BLANK WHEN ZERO AUTO UNDERLINE
                LINE 13 COL 56 PIC 9(4) USING ANO2-USUARIO.
-           05 EUR-ENT-MIN BLANK WHEN ZERO AUTO UNDERLINE
-               LINE 15 COL 30 PIC 9(7) USING EURENT1-USUARIO.
-           05 EUR-DEC-MIN BLANK WHEN ZERO AUTO UNDERLINE
-               LINE 15 COL 38 PIC 9(2) USING EURDEC1-USUARIO.
-           05 EUR-ENT-MAX BLANK WHEN ZERO AUTO UNDERLINE
-               LINE 15 COL 47 PIC 9(7) USING EURENT2-USUARIO.
-           05 EUR-DEC-MAX BLANK WHEN ZERO AUTO UNDERLINE
-               LINE 15 COL 55 PIC 9(2) USING EURDEC2-USUARIO.
+
+
+           05 EURENT1-SIG AUTO UNDERLINE
+               LINE 15 COL 30 PIC X USING EURENT1-USUARIO-SIG.
+           05 EUR-ENT-MIN AUTO UNDERLINE
+               LINE 15 COL 31 PIC 9(7) USING EURENT1-USUARIO.
+           05 EUR-DEC-MIN AUTO UNDERLINE
+               LINE 15 COL 39 PIC 9(2) USING EURDEC1-USUARIO.
+
+           05 EURENT2-SIG AUTO UNDERLINE
+               LINE 15 COL 48 PIC X USING EURENT2-USUARIO-SIG.
+           05 EUR-ENT-MAX AUTO UNDERLINE
+               LINE 15 COL 49 PIC 9(7) USING EURENT2-USUARIO.
+           05 EUR-DEC-MAX AUTO UNDERLINE
+               LINE 15 COL 57 PIC 9(2) USING EURDEC2-USUARIO.
 
 
        01 FILA-MOVIMIENTO-PAR.
@@ -257,7 +266,7 @@
 
            DISPLAY "Entre las fechas   /  /     y   /  /    "
                LINE 13 COL 20.
-           DISPLAY "Cantidad entre        .   EUR y        .   EUR"
+           DISPLAY "Cantidad entre         .   EUR y         .   EUR"
                LINE 15 COL 15.
 
            DISPLAY "Enter - Aceptar" LINE 24 COL 01.
@@ -280,6 +289,13 @@
                MOVE 99        TO EURDEC2-USUARIO
                MOVE -9999999  TO EURENT1-USUARIO
                MOVE 99        TO EURDEC1-USUARIO.
+
+           IF EURENT1-USUARIO-SIG = '-'
+               MULTIPLY -1 BY EURENT1-USUARIO.
+
+           IF EURENT2-USUARIO-SIG = '-'
+               MULTIPLY -1 BY EURENT2-USUARIO.
+
 
            PERFORM IMPRIMIR-CABECERA THRU IMPRIMIR-CABECERA.
 
