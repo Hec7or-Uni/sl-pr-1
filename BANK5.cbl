@@ -219,8 +219,6 @@
            Display "Billetes de 10 euros:      " LINE 14 COL 19.
            DISPLAY "Billetes de 20 euros:      " LINE 15 COL 19.
            DISPLAY "Billetes de 50 euros:      " LINE 16 COL 19.
-      *     DISPLAY "." LINE 13 COL 48.
-      *     DISPLAY "EUR" LINE 13 COL 52.
 
            DISPLAY "Enter - Aceptar" LINE 24 COL 1.
            DISPLAY "ESC - Cancelar" LINE 24 COL 66.
