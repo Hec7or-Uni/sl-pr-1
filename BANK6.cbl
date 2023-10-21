@@ -80,6 +80,11 @@
            88 ESC-PRESSED        VALUE  2005.
 
        77 PRESSED-KEY              PIC   9(4).
+       77 CHOICE                   PIC   9(1).
+       77 DIA-T                    PIC   9(2).
+       77 MES-T                    PIC   9(2).
+       77 ANO-T                    PIC   9(4).
+       77 PERIODICA                PIC   9(1).
 
        77 LAST-MOV-NUM             PIC  9(35).
        77 LAST-USER-ORD-MOV-NUM    PIC  9(35).
@@ -115,6 +120,15 @@
                LINE 16 COL 54 PIC -9(7) USING EURENT-USUARIO.
            05 FILLER BLANK ZERO UNDERLINE
                LINE 16 COL 64 PIC 9(2) USING EURDEC-USUARIO.
+           05 FILLER  BLANK ZERO AUTO UNDERLINE
+               LINE 18 COL 54 PIC 9(2) USING DIA-T.
+           05 FILLER  BLANK ZERO AUTO UNDERLINE
+               LINE 18 COL 57 PIC 9(2) USING MES-T.
+           05 FILLER  BLANK ZERO AUTO UNDERLINE
+               LINE 18 COL 60 PIC 9(4) USING ANO-T.
+           05 FILLER BLANK ZERO AUTO UNDERLINE
+               LINE 20 COL 54 PIC 9(1) USING PERIODICA.
+
 
        01 SALDO-DISPLAY.
            05 FILLER SIGN IS LEADING SEPARATE
@@ -172,11 +186,11 @@
        ORDENACION-TRF.
            CLOSE F-MOVIMIENTOS.
 
-           DISPLAY "Ordenar Transferencia" LINE 8 COL 30.
-           DISPLAY "Saldo Actual:" LINE 10 COL 19.
+      *     DISPLAY "Ordenar Transferencia" LINE 8 COL 30.
+      *     DISPLAY "Saldo Actual:" LINE 10 COL 19.
 
-           DISPLAY "Enter - Confirmar" LINE 24 COL 2.
-           DISPLAY "ESC - Cancelar" LINE 24 COL 66.
+      *     DISPLAY "Enter - Confirmar" LINE 24 COL 2.
+      *     DISPLAY "ESC - Cancelar" LINE 24 COL 66.
 
            IF LAST-USER-ORD-MOV-NUM = 0 THEN
                GO TO NO-MOVIMIENTOS
@@ -186,15 +200,45 @@
 
            PERFORM MOVIMIENTOS-OPEN THRU MOVIMIENTOS-OPEN.
            READ F-MOVIMIENTOS INVALID KEY GO PSYS-ERR.
-           DISPLAY SALDO-DISPLAY.
+      *     DISPLAY SALDO-DISPLAY.
            CLOSE F-MOVIMIENTOS.
 
+       ELEGIR-TRANS.
+           DISPLAY "1 - TRASFERENCIA PUNTUAL" LINE 8 COL 15.
+           DISPLAY "2 - TRANSFERENCIA MENSUAL" LINE 9 COL 15.
+           DISPLAY "ESC - Cancelar" LINE 24 COL 66.
+
+           ACCEPT CHOICE WITH NO ECHO LINE 24 COL 80 ON EXCEPTION
+               IF ESC-PRESSED
+                   EXIT PROGRAM
+               ELSE
+                   GO TO PMENUA1.
+       PMENUA1.
+           IF CHOICE = 1
+               GO TO INDICAR-CTA-DST.
+
+           IF CHOICE = 2
+               GO TO INDICAR-CTA-DST.
+
        INDICAR-CTA-DST.
+
+           PERFORM IMPRIMIR-CABECERA THRU IMPRIMIR-CABECERA.
+
+           DISPLAY "Ordenar Transferencia" LINE 8 COL 30.
+           DISPLAY "Saldo Actual:" LINE 10 COL 19.
+           DISPLAY SALDO-DISPLAY.
+
+           DISPLAY "Enter - Confirmar" LINE 24 COL 2.
+           DISPLAY "ESC - Cancelar" LINE 24 COL 66.
+
            DISPLAY "Indica la cuenta destino" LINE 12 COL 19.
            DISPLAY "y nombre del titular" LINE 14 COL 19.
            DISPLAY "Indique la cantidad a transferir" LINE 16 COL 19.
            DISPLAY "," LINE 16 COL 63.
            DISPLAY "EUR" LINE 16 COL 66.
+           DISPLAY "Fecha de la transferencia            /  /     "
+               LINE 18 COL 19.
+           DISPLAY "Es periodica 0-NO 1-SI" LINE 20 COL 19
 
            COMPUTE CENT-SALDO-ORD-USER = (MOV-SALDOPOS-ENT * 100)
                                          + MOV-SALDOPOS-DEC.
@@ -228,6 +272,9 @@
            DISPLAY "Indique la cantidad a transferir" LINE 16 COL 19.
            DISPLAY "," LINE 16 COL 61.
            DISPLAY "EUR" LINE 16 COL 66.
+
+
+
 
            ACCEPT FILTRO-CUENTA ON EXCEPTION
            IF ESC-PRESSED THEN
