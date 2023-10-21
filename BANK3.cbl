@@ -119,15 +119,13 @@
            05 ANO-MAX BLANK ZERO AUTO UNDERLINE
                LINE 13 COL 56 PIC 9(4) USING ANO2-USUARIO.
            05 EUR-ENT-MIN BLANK ZERO AUTO UNDERLINE
-               SIGN IS LEADING SEPARATE
-               LINE 15 COL 30 PIC -9(7) USING EURENT1-USUARIO.
+               LINE 15 COL 30 PIC 9(7) USING EURENT1-USUARIO.
            05 EUR-DEC-MIN BLANK ZERO AUTO UNDERLINE
-               LINE 15 COL 39 PIC 9(2) USING EURDEC1-USUARIO.
+               LINE 15 COL 38 PIC 9(2) USING EURDEC1-USUARIO.
            05 EUR-ENT-MAX BLANK ZERO AUTO UNDERLINE
-               SIGN IS LEADING SEPARATE
-               LINE 15 COL 48 PIC -9(7) USING EURENT2-USUARIO.
+               LINE 15 COL 47 PIC 9(7) USING EURENT2-USUARIO.
            05 EUR-DEC-MAX BLANK ZERO UNDERLINE
-               LINE 15 COL 57 PIC 9(2) USING EURDEC2-USUARIO.
+               LINE 15 COL 55 PIC 9(2) USING EURDEC2-USUARIO.
 
        01 FILA-MOVIMIENTO-PAR.
 
@@ -258,7 +256,7 @@
 
            DISPLAY "Entre las fechas   /  /     y   /  /    "
                LINE 13 COL 20.
-           DISPLAY "Cantidad entre    .   EUR y    .   EUR"
+           DISPLAY "Cantidad entre        .   EUR y        .   EUR"
                LINE 15 COL 15.
 
            DISPLAY "Enter - Aceptar" LINE 24 COL 01.
@@ -270,17 +268,13 @@
                ELSE
                    GO TO PCONSULTA-MOV.
 
-           IF DIA2-USUARIO = 0
-               IF MES2-USUARIO = 0
-                   IF ANO2-USUARIO = 0
+           IF DIA2-USUARIO = 0 AND MES2-USUARIO = 0 AND ANO2-USUARIO = 0
                        MOVE 99   TO DIA2-USUARIO
                        MOVE 99   TO MES2-USUARIO
                        MOVE 9999 TO ANO2-USUARIO.
 
-           IF EURENT2-USUARIO = 0
-               IF EURDEC2-USUARIO = 0
-                   IF EURENT1-USUARIO = 0
-                       IF EURDEC1-USUARIO = 0
+           IF EURENT2-USUARIO = 0 AND EURDEC2-USUARIO = 0 AND
+              EURENT1-USUARIO = 0 AND EURDEC1-USUARIO = 0
                            MOVE 9999999  TO EURENT2-USUARIO
                            MOVE 99       TO EURDEC2-USUARIO
                            MOVE -9999999  TO EURENT1-USUARIO
@@ -289,7 +283,7 @@
            PERFORM IMPRIMIR-CABECERA THRU IMPRIMIR-CABECERA.
 
            OPEN INPUT F-MOVIMIENTOS.
-               IF FSM <> 30
+               IF FSM <> 00
                    GO TO PSYS-ERR.
 
        POSICIONAR-FINAL.

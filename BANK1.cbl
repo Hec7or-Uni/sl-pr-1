@@ -33,7 +33,6 @@
            FILE STATUS IS FSTR.
 
 
-
        DATA DIVISION.
        FILE SECTION.
        FD TARJETAS
@@ -49,7 +48,6 @@
        01 INTENTOSREG.
            02 INUM      PIC 9(16).
            02 IINTENTOS PIC 9(1).
-
        FD F-MOVIMIENTOS
            LABEL RECORD STANDARD
            VALUE OF FILE-ID IS "../data/movimientos.ubd".
@@ -67,7 +65,6 @@
            02 MOV-CONCEPTO         PIC  X(35).
            02 MOV-SALDOPOS-ENT     PIC  S9(9).
            02 MOV-SALDOPOS-DEC     PIC   9(2).
-
        FD F-TRANSFERENCIAS
            LABEL RECORD STANDARD
            VALUE OF FILE-ID IS "../data/transferencias.ubd".
@@ -83,8 +80,8 @@
            02 TR-MES               PIC   9(2).
            02 TR-DIA               PIC   9(2).
 
-
        WORKING-STORAGE SECTION.
+
        77 FST                      PIC  X(2).
        77 FSI                      PIC  X(2).
        77 FSM                      PIC  X(2).
@@ -98,7 +95,6 @@
        78 MAGENTA VALUE 5.
        78 YELLOW  VALUE 6.
        78 WHITE   VALUE 7.
-       78 GREY    VALUE 8.
 
        01 CAMPOS-FECHA.
            05 FECHA.
@@ -123,17 +119,28 @@
        77 PRESSED-KEY              PIC  9(4).
        77 PIN-INTRODUCIDO          PIC  9(4).
        77 CHOICE                   PIC  9(1).
+       77 FECHA-ACTUAL             PIC  9(8).
+       77 FECHA-ULT-COMP-TR        PIC  9(8) VALUE 0.
+       77 SALDO-SUFICIENTE         PIC  9(1).
 
+       77 LAST-USER-ORD-MOV-NUM    PIC  9(35).
+       77 LAST-MOV-NUM             PIC  9(35).
+
+       77 CENT-SALDO-ORD-USER      PIC  S9(9).
+       77 CENT-IMPOR-USER          PIC  S9(9).
 
        SCREEN SECTION.
        01 BLANK-SCREEN.
            05 FILLER LINE 1 BLANK SCREEN BACKGROUND-COLOR BLACK.
+
 
        01 DATA-ACCEPT.
            05 TARJETA-ACCEPT BLANK ZERO AUTO LINE 08 COL 50
                PIC 9(16) USING TNUM.
            05 PIN-ACCEPT BLANK ZERO SECURE LINE 09 COL 50
                PIC 9(4) USING PIN-INTRODUCIDO.
+
+
 
        PROCEDURE DIVISION.
        IMPRIMIR-CABECERA.
@@ -144,30 +151,35 @@
            DISPLAY BLANK-SCREEN.
 
            DISPLAY "Cajero Automatico UnizarBank" LINE 2 COL 26
-               WITH FOREGROUND-COLOR IS BLUE.
+               WITH FOREGROUND-COLOR IS BLUE
+               WITH BACKGROUND-COLOR IS WHITE.
 
            MOVE FUNCTION CURRENT-DATE TO CAMPOS-FECHA.
 
-           DISPLAY DIA LINE 4 COL 32.
-           DISPLAY "-" LINE 4 COL 34.
-           DISPLAY MES LINE 4 COL 35.
-           DISPLAY "-" LINE 4 COL 37.
-           DISPLAY ANO LINE 4 COL 38.
-           DISPLAY HORAS LINE 4 COL 44.
-           DISPLAY ":" LINE 4 COL 46.
-           DISPLAY MINUTOS LINE 4 COL 47.
+           DISPLAY DIA LINE 4 COL 32 .
+           DISPLAY "-" LINE 4 COL 34 .
+           DISPLAY MES LINE 4 COL 35 .
+           DISPLAY "-" LINE 4 COL 37 "-".
+           DISPLAY ANO LINE 4 COL 38 .
+           DISPLAY HORAS LINE 4 COL 44 .
+           DISPLAY ":" LINE 4 COL 46 .
+           DISPLAY MINUTOS LINE 4 COL 47 .
+
 
        P1.
            DISPLAY "Bienvenido a UnizarBank" LINE 8 COL 28.
-           DISPLAY "Introduzca su tarjeta para operar" LINE 10 COL 24.
+           DISPLAY "Por favor, introduzca la tarjeta para operar"
+               LINE 10 COL 18.
+
            DISPLAY "Enter - Aceptar" LINE 24 COL 33.
 
        P1-ENTER.
-           ACCEPT CHOICE WITH NO ECHO LINE 25 COL 80 ON EXCEPTION
+           ACCEPT CHOICE WITH NO ECHO LINE 24 COL 79 ON EXCEPTION
            IF ENTER-PRESSED
                GO TO P2
            ELSE
                GO TO P1-ENTER.
+
 
        P2.
            PERFORM IMPRIMIR-CABECERA THRU IMPRIMIR-CABECERA.
@@ -177,16 +189,17 @@
            INITIALIZE TPIN.
            DISPLAY "Numero de tarjeta:" LINE 8 COL 15.
            DISPLAY "Inserte el pin de tarjeta:" LINE 9 COL 15.
-           ACCEPT DATA-ACCEPT WITH NO ECHO ON EXCEPTION
+           ACCEPT DATA-ACCEPT ON EXCEPTION
                IF ESC-PRESSED
                    GO TO IMPRIMIR-CABECERA
                ELSE
                    GO TO P2.
 
-           CLOSE TARJETAS.
+           CLOSE TARJETAS .
            OPEN I-O TARJETAS.
            IF FST NOT = 00
                GO TO PSYS-ERR.
+
            READ TARJETAS INVALID KEY GO TO PSYS-ERR.
 
            CLOSE INTENTOS.
@@ -213,11 +226,14 @@
            IF FSI NOT = 00
                GO TO PSYS-ERR.
            MOVE TNUM TO INUM.
+
            READ INTENTOS INVALID KEY GO TO PSYS-ERR.
+
            IF IINTENTOS <= 0
                CLOSE INTENTOS
                PERFORM IMPRIMIR-CABECERA THRU IMPRIMIR-CABECERA
                GO TO P1.
+
            CLOSE INTENTOS.
 
            PERFORM IMPRIMIR-CABECERA THRU IMPRIMIR-CABECERA.
@@ -226,16 +242,20 @@
            DISPLAY "3 - Retirar efectivo" LINE 10 COL 15.
            DISPLAY "4 - Ingresar efectivo" LINE 11 COL 15.
            DISPLAY "5 - Ordenar transferencia" LINE 12 COL 15.
-           DISPLAY "6 - Comprar entradas de espectaculos" LINE 13 COL 15.
-           DISPLAY "7 - Cambiar clave" LINE 15 COL 15.
+           DISPLAY "6 - Listado de transferencias"
+               LINE 13 COL 15.
+           DISPLAY "7 - Comprar entradas de espectaculos"
+               LINE 14 COL 15.
+           DISPLAY "8 - Cambiar clave" LINE 16 COL 15.
            DISPLAY "ESC - Salir" LINE 24 COL 34.
 
        PMENUA1.
-           ACCEPT CHOICE WITH NO ECHO LINE 24 COL 80 ON EXCEPTION
+           ACCEPT CHOICE LINE 24 COL 79 ON EXCEPTION
                IF ESC-PRESSED
                    GO TO IMPRIMIR-CABECERA
                ELSE
                    GO TO PMENUA1.
+
 
            IF CHOICE = 1
                CALL "BANK2" USING TNUM
@@ -258,17 +278,23 @@
                GO TO PMENU.
 
            IF CHOICE = 6
-               CALL "BANK7" USING TNUM
+               CALL "BANK9" USING TNUM
                GO TO PMENU.
 
            IF CHOICE = 7
+               CALL "BANK7" USING TNUM
+               GO TO PMENU.
+
+           IF CHOICE = 8
                CALL "BANK8" USING TNUM
                GO TO PMENU.
 
            GO TO PMENU.
 
-       PSYS-ERR.
 
+       PSYS-ERR.
+           CLOSE F-MOVIMIENTOS.
+           CLOSE F-TRANSFERENCIAS.
            CLOSE TARJETAS.
            CLOSE INTENTOS.
 
@@ -282,35 +308,37 @@
            DISPLAY "Enter - Aceptar" LINE 24 COL 33.
            GO TO PINT-ERR-ENTER.
 
+
        PINT-ERR.
-           CLOSE F-MOVIMIENTOS.
-           CLOSE F-TRANSFERENCIAS.
+
            CLOSE TARJETAS.
            CLOSE INTENTOS.
 
            PERFORM IMPRIMIR-CABECERA THRU IMPRIMIR-CABECERA.
-           DISPLAY "Se ha sobrepasado el nº de intentos" LINE 9 COL 20
+           DISPLAY " Se ha sobrepasado el numero de intentos"
+               LINE 9 COL 20
                WITH FOREGROUND-COLOR IS WHITE
                     BACKGROUND-COLOR IS RED.
-           DISPLAY "Por su seguridad se ha bloqueado la tarjeta" LINE 11 COL 18
+           DISPLAY "Por su seguridad se ha bloqueado la tarjeta"
+               LINE 11 COL 18
+                   WITH FOREGROUND-COLOR IS WHITE
+                   BACKGROUND-COLOR IS RED.
+           DISPLAY "Acuda a una sucursal" LINE 12 COL 30
                WITH FOREGROUND-COLOR IS WHITE
                     BACKGROUND-COLOR IS RED.
-           DISPLAY "Acuda a una sucursal" LINE 11 COL 30
-               WITH FOREGROUND-COLOR IS WHITE
-                    BACKGROUND-COLOR IS RED.
-           DISPLAY "Enter - Aceptar" LINE 24 COL 33.
+           DISPLAY "Enter - Aceptar" LINE 24 COL 33 .
 
        PINT-ERR-ENTER.
-           ACCEPT CHOICE WITH NO ECHO LINE 24 COL 80 ON EXCEPTION
+           ACCEPT CHOICE WITH NO ECHO LINE 24 COL 79 ON EXCEPTION
            IF ENTER-PRESSED
                GO TO IMPRIMIR-CABECERA
            ELSE
                GO TO PINT-ERR-ENTER.
 
+
        PPIN-ERR.
            IF IINTENTOS > 0
                SUBTRACT 1 FROM IINTENTOS.
-
            REWRITE INTENTOSREG INVALID KEY GO TO PSYS-ERR.
 
            CLOSE TARJETAS.
@@ -335,9 +363,11 @@
            DISPLAY "ESC - Cancelar" LINE 24 COL 65.
 
        PPIN-ERR-ENTER.
-           ACCEPT CHOICE LINE 24 COL 80 ON EXCEPTION
+           ACCEPT CHOICE WITH NO ECHO LINE 24 COL 79 ON EXCEPTION
+           DISPLAY " " LINE 0  COL 0.
+
            IF ENTER-PRESSED
-               GO TO P2
+               GO TO IMPRIMIR-CABECERA
            ELSE
                IF ESC-PRESSED
                    GO TO IMPRIMIR-CABECERA
