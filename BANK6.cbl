@@ -114,7 +114,7 @@
       *        LINE 16 COL 54 PIC 9(7) USING EURENT-USUARIO.
                LINE 16 COL 54 PIC -9(7) USING EURENT-USUARIO.
            05 FILLER BLANK ZERO UNDERLINE
-               LINE 16 COL 63 PIC 9(2) USING EURDEC-USUARIO.
+               LINE 16 COL 64 PIC 9(2) USING EURDEC-USUARIO.
 
        01 SALDO-DISPLAY.
            05 FILLER SIGN IS LEADING SEPARATE
@@ -153,7 +153,7 @@
 
        MOVIMIENTOS-OPEN.
            OPEN I-O F-MOVIMIENTOS.
-           IF FSM <> 30 THEN
+           IF FSM <> 00 THEN
                GO TO PSYS-ERR
            END-IF.
 
@@ -193,7 +193,7 @@
            DISPLAY "Indica la cuenta destino" LINE 12 COL 19.
            DISPLAY "y nombre del titular" LINE 14 COL 19.
            DISPLAY "Indique la cantidad a transferir" LINE 16 COL 19.
-           DISPLAY "," LINE 16 COL 61.
+           DISPLAY "," LINE 16 COL 63.
            DISPLAY "EUR" LINE 16 COL 66.
 
            COMPUTE CENT-SALDO-ORD-USER = (MOV-SALDOPOS-ENT * 100)
@@ -257,8 +257,8 @@
            ACCEPT PRESSED-KEY WITH NO ECHO LINE 24 COL 80 ON EXCEPTION
            IF ESC-PRESSED THEN
                EXIT PROGRAM
-           ELSE
-               GO TO ENTER-VERIFICACION
+      *     ELSE
+      *         GO TO ENTER-VERIFICACION
            END-IF.
 
        VERIFICACION-CTA-CORRECTA.

@@ -70,14 +70,10 @@
        77 LAST-MOV-NUM             PIC   9(35).
 
        77 EURENT-USUARIO           PIC    9(7).
-       77 EURDEC-USUARIO           PIC    9(2).
-       77 EUR10                    PIC    9(4).
-       77 EUR20                    PIC    9(4).
-       77 EUR50                    PIC    9(4).
-
-       01 RES1                     PIC    9(6).
-       01 RES2                     PIC    9(6).
-       01 RES3                     PIC    9(6).
+       77 EURDEC-USUARIO           PIC    9(2) VALUE 0.
+       77 EUR10                    PIC    9(3).
+       77 EUR20                    PIC    9(3).
+       77 EUR50                    PIC    9(3).
 
        77 SALDO-USUARIO-ENT        PIC   S9(9).
        77 SALDO-USUARIO-DEC        PIC    9(2).
@@ -95,19 +91,19 @@
        01 BLANK-SCREEN.
            05 FILLER LINE 1 BLANK SCREEN BACKGROUND-COLOR BLACK.
 
-       01 ENTRADA-USUARIO.
-           05 FILLER BLANK ZERO AUTO UNDERLINE
-               LINE 13 COL 41 PIC 9(7) USING EURENT-USUARIO.
-           05 FILLER BLANK ZERO UNDERLINE
-               LINE 13 COL 49 PIC 9(2) USING EURDEC-USUARIO.
+      * 01 ENTRADA-USUARIO.
+      *     05 FILLER BLANK ZERO AUTO UNDERLINE
+      *         LINE 13 COL 41 PIC 9(7) USING EURENT-USUARIO.
+      *     05 FILLER BLANK ZERO UNDERLINE
+      *         LINE 13 COL 49 PIC 9(2) USING EURDEC-USUARIO.
 
-       01 ENTRADA-USUARIOO.
-           05 FILLER BLANK ZERO AUTO UNDERLINE
-               LINE 14 COL 41 PIC 9(4) USING EUR10.
-           05 FILLER BLANK ZERO UNDERLINE
-               LINE 15 COL 41 PIC 9(4) USING EUR20.
-           05 FILLER BLANK ZERO UNDERLINE
-               LINE 16 COL 41 PIC 9(4) USING EUR50.
+       01 ENTRADA-USUARIO.
+           05 FILLER UNDERLINE
+               LINE 14 COL 41 PIC 9(3) USING EUR10.
+           05 FILLER UNDERLINE
+               LINE 15 COL 41 PIC 9(3) USING EUR20.
+           05 FILLER UNDERLINE
+               LINE 16 COL 41 PIC 9(3) USING EUR50.
 
        01 SALDO-DISPLAY.
            05 FILLER SIGN IS LEADING SEPARATE
@@ -207,13 +203,12 @@
            CLOSE F-MOVIMIENTOS.
 
        PANTALLA-INGRESO SECTION.
-      *     INITIALIZE EURENT-USUARIO.
-      *     INITIALIZE EURDEC-USUARIO.
            INITIALIZE EUR10.
            INITIALIZE EUR20.
            INITIALIZE EUR50.
 
-           DISPLAY "ESC - Finalizar ingreso efectivo" LINE 24 COL 33.
+
+
            DISPLAY "Ingresar efectivo" LINE 8 COL 30.
            DISPLAY "Saldo Actual: " LINE 10 COL 19.
 
@@ -227,19 +222,16 @@
       *     DISPLAY "." LINE 13 COL 48.
       *     DISPLAY "EUR" LINE 13 COL 52.
 
+           DISPLAY "Enter - Aceptar" LINE 24 COL 1.
+           DISPLAY "ESC - Cancelar" LINE 24 COL 66.
+
        CONF2.
-           ACCEPT ENTRADA-USUARIOO ON EXCEPTION
+           ACCEPT ENTRADA-USUARIO ON EXCEPTION
                IF ESC-PRESSED THEN
-     *              GO TO PANT
-                    EXIT PROGRAM
+                   EXIT PROGRAM
                ELSE
                    GO TO CONF2
                END-IF.
-
-
-      *     MULTIPLY EUR10 BY 10 GIVING RES1.
-      *     MULTIPLY EUR20 BY 20 GIVING RES2.
-      *     MULTIPLY EUR50 BY 50 GIVING RES3.
 
            COMPUTE EURENT-USUARIO = (EUR50 * 50)
                                    +(EUR20 * 20)
@@ -286,7 +278,7 @@
            WRITE MOVIMIENTO-REG INVALID KEY GO TO PSYS-ERR.
            CLOSE F-MOVIMIENTOS.
 
-           GO TO PANTALLA-INGRESO.
+      *     GO TO PANTALLA-INGRESO.
 
        PANT SECTION.
 
@@ -298,12 +290,6 @@
            PERFORM IMPRIMIR-CABECERA THRU IMPRIMIR-CABECERA.
            DISPLAY "Ingresar efectivo" LINE 8 COL 30.
            DISPLAY "Se han recibido correctamente:" LINE 10 COL 19.
-      *     DISPLAY "Billetes de 10  euros: " LINE 11 COL 19.
-      *     DISPLAY EUR10 LINE 11 COL 50.
-      *     DISPLAY "Billetes de 20  euros: " LINE 12 COL 19.
-      *     DISPLAY EUR20 LINE 12 COL 50.
-      *     DISPLAY "Billetes de 50  euros: " LINE 13 COL 19.
-      *     DISPLAY EUR50 LINE 13 COL 50.
            DISPLAY EURENT-USUARIO LINE 10 COL 50.
            DISPLAY EURDEC-USUARIO LINE 10 COL 58.
            DISPLAY "." LINE 10 COL 57.
@@ -322,10 +308,10 @@
 
            PERFORM IMPRIMIR-CABECERA THRU IMPRIMIR-CABECERA.
            DISPLAY "Ha ocurrido un error interno" LINE 9 COL 25
-               WITH FOREGROUND-COLOR IS BLACK
+               WITH FOREGROUND-COLOR IS WHITE
                     BACKGROUND-COLOR IS RED.
            DISPLAY "Vuelva mas tarde" LINE 11 COL 32
-               WITH FOREGROUND-COLOR IS BLACK
+               WITH FOREGROUND-COLOR IS WHITE
                     BACKGROUND-COLOR IS RED.
            DISPLAY "Enter - Aceptar" LINE 24 COL 33.
 

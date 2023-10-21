@@ -113,7 +113,7 @@
 
            DISPLAY BLANK-SCREEN.
            DISPLAY "Cajero Automatico UnizarBank" LINE 2 COL 26
-               WITH FOREGROUND-COLOR IS 1.
+               WITH FOREGROUND-COLOR IS BLUE.
 
            MOVE FUNCTION CURRENT-DATE TO CAMPOS-FECHA.
 
@@ -129,7 +129,8 @@
        CONSULTA-ULTIMO-MOVIMIENTO SECTION.
            OPEN I-O F-MOVIMIENTOS.
            IF FSM <> 00
-              GO TO PSYS-ERR.
+               DISPLAY "ERR 1" LINE 0 COL 0
+      *        GO TO PSYS-ERR.
 
            MOVE 0 TO LAST-MOV-NUM.
 
@@ -147,7 +148,8 @@
        CONSULTA-SALDO-USUARIO SECTION.
            OPEN INPUT F-MOVIMIENTOS.
            IF FSM <> 00
-               GO TO PSYS-ERR.
+               DISPLAY "ERR 2" LINE 0 COL 0
+      *         GO TO PSYS-ERR.
 
            MOVE 0 TO LAST-USER-MOV-NUM.
            MOVE 0 TO MOV-NUM.
@@ -200,8 +202,8 @@
            DISPLAY SALDO-DISPLAY.
 
            DISPLAY "Indique la cantidad:         " LINE 11 COL 19.
-           DISPLAY ".".
-           DISPLAY "EUR".
+           DISPLAY "." LINE 11 COL 47.
+           DISPLAY "EUR" LINE 11 COL 51.
 
            ACCEPT ENTRADA-USUARIO ON EXCEPTION
            IF ESC-PRESSED THEN
@@ -223,7 +225,8 @@
 
            OPEN I-O F-MOVIMIENTOS.
            IF FSM <> 00
-              GO TO PSYS-ERR.
+              DISPLAY "ERR 4" LINE 0 COL 0.
+      *        GO TO PSYS-ERR.
 
            SUBTRACT CENT-IMPOR-USER FROM CENT-SALDO-USER.
            COMPUTE SALDO-USUARIO-ENT = (CENT-SALDO-USER / 100).
@@ -272,10 +275,10 @@
 
            PERFORM IMPRIMIR-CABECERA THRU IMPRIMIR-CABECERA.
            DISPLAY "Ha ocurrido un error interno" LINE 9 COL 25
-               WITH FOREGROUND-COLOR IS BLACK
+               WITH FOREGROUND-COLOR IS WHITE
                     BACKGROUND-COLOR IS RED.
            DISPLAY "Vuelva mas tarde" LINE 11 COL 32
-               WITH FOREGROUND-COLOR IS BLACK
+               WITH FOREGROUND-COLOR IS WHITE
                     BACKGROUND-COLOR IS RED.
            DISPLAY "Enter - Aceptar" LINE 24 COL 33.
 
