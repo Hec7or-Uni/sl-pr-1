@@ -20,6 +20,12 @@
            RECORD KEY IS MOV-NUM
            FILE STATUS IS FSM.
 
+           SELECT OPTIONAL F-TRANSFERENCIAS ASSIGN TO DISK
+           ORGANIZATION IS INDEXED
+           ACCESS MODE IS DYNAMIC
+           RECORD KEY IS TRANS-ORG
+           FILE STATUS IS FSTR.
+
        DATA DIVISION.
        FILE SECTION.
        FD TARJETAS
@@ -46,9 +52,18 @@
            02 MOV-SALDOPOS-ENT     PIC  S9(9).
            02 MOV-SALDOPOS-DEC     PIC   9(2).
 
+       FD F-TRANSFERENCIAS
+           LABEL RECORD STANDARD
+           VALUE OF FILE-ID IS "../data/transferencias.ubd".
+       01 TRANSREG.
+           02 TRANS-ORG            PIC 9(3).
+           02 TRANS-DEST           PIC 9(3).
+           02 TRANS-TIT            PIC 9(3).
+
        WORKING-STORAGE SECTION.
        77 FST                      PIC   X(2).
        77 FSM                      PIC   X(2).
+       77 FSTR                     PIC   X(2).
 
        78 BLACK                  VALUE      0.
        78 BLUE                   VALUE      1.
@@ -203,23 +218,6 @@
       *     DISPLAY SALDO-DISPLAY.
            CLOSE F-MOVIMIENTOS.
 
-       ELEGIR-TRANS.
-           DISPLAY "1 - TRASFERENCIA PUNTUAL" LINE 8 COL 15.
-           DISPLAY "2 - TRANSFERENCIA MENSUAL" LINE 9 COL 15.
-           DISPLAY "ESC - Cancelar" LINE 24 COL 66.
-
-           ACCEPT CHOICE WITH NO ECHO LINE 24 COL 80 ON EXCEPTION
-               IF ESC-PRESSED
-                   EXIT PROGRAM
-               ELSE
-                   GO TO PMENUA1.
-       PMENUA1.
-           IF CHOICE = 1
-               GO TO INDICAR-CTA-DST.
-
-           IF CHOICE = 2
-               GO TO INDICAR-CTA-DST.
-
        INDICAR-CTA-DST.
 
            PERFORM IMPRIMIR-CABECERA THRU IMPRIMIR-CABECERA.
@@ -238,7 +236,7 @@
            DISPLAY "EUR" LINE 16 COL 66.
            DISPLAY "Fecha de la transferencia            /  /     "
                LINE 18 COL 19.
-           DISPLAY "Es periodica 0-NO 1-SI" LINE 20 COL 19
+           DISPLAY "Transferencia mensual 0-NO 1-SI" LINE 20 COL 19
 
            COMPUTE CENT-SALDO-ORD-USER = (MOV-SALDOPOS-ENT * 100)
                                          + MOV-SALDOPOS-DEC.

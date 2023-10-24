@@ -669,4 +669,4 @@
                                   + DIA.
 
            IF FECHA-ACTUAL > FECHA-ESP-FILTRO
-               MOVE 0 TO ESP-VALIDO.
+               MOVE 1 TO ESP-VALIDO.
