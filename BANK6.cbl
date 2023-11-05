@@ -129,12 +129,10 @@
                LINE 12 COL 54 PIC 9(16) USING CUENTA-DESTINO.
            05 FILLER AUTO UNDERLINE
                LINE 14 COL 54 PIC X(15) USING NOMBRE-DESTINO.
-           05 FILLER BLANK ZERO AUTO UNDERLINE
-               SIGN IS LEADING SEPARATE
-      *        LINE 16 COL 54 PIC 9(7) USING EURENT-USUARIO.
-               LINE 16 COL 54 PIC -9(7) USING EURENT-USUARIO.
-           05 FILLER BLANK ZERO UNDERLINE
-               LINE 16 COL 64 PIC 9(2) USING EURDEC-USUARIO.
+           05 FILLER AUTO UNDERLINE
+               LINE 16 COL 54 PIC 9(7) USING EURENT-USUARIO.
+           05 FILLER UNDERLINE
+               LINE 16 COL 62 PIC 9(2) USING EURDEC-USUARIO.
            05 FILLER  BLANK ZERO AUTO UNDERLINE
                LINE 18 COL 54 PIC 9(2) USING DIA-T.
            05 FILLER  BLANK ZERO AUTO UNDERLINE
@@ -232,9 +230,8 @@
 
            DISPLAY "Indica la cuenta destino" LINE 12 COL 19.
            DISPLAY "y nombre del titular" LINE 14 COL 19.
-           DISPLAY "Indique la cantidad a transferir" LINE 16 COL 19.
-           DISPLAY "," LINE 16 COL 63.
-           DISPLAY "EUR" LINE 16 COL 66.
+           DISPLAY "Indique la cantidad a transferir          .   EUR"
+               LINE 16 COL 19.
            DISPLAY "Fecha de la transferencia            /  /     "
                LINE 18 COL 19.
            DISPLAY "Transferencia mensual 0-NO 1-SI" LINE 20 COL 19
