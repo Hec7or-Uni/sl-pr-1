@@ -140,7 +140,7 @@
 
       * Chequea si el pin introducido es el mismo que el que ha insertado
       * el usuario al entrar en la aplicacion.
-      * Si no coinciden muestra un mensaje de error
+      * Si no coinciden muestra un mensaje de
        P3.
            PERFORM IMPRIMIR-CABECERA THRU IMPRIMIR-CABECERA.
            DISPLAY "Enter - Reintentar" LINE 24 COL 01.

@@ -113,7 +113,8 @@
 
            DISPLAY BLANK-SCREEN.
            DISPLAY "Cajero Automatico UnizarBank" LINE 2 COL 26
-               WITH FOREGROUND-COLOR IS BLUE.
+               WITH FOREGROUND-COLOR IS BLUE
+               WITH BACKGROUND-COLOR IS WHITE.
 
            MOVE FUNCTION CURRENT-DATE TO CAMPOS-FECHA.
 
