@@ -92,23 +92,23 @@
            SET ENVIRONMENT 'COB_SCREEN_EXCEPTIONS' TO 'Y'.
 
            DISPLAY BLANK-SCREEN.
-           DISPLAY(2 26) "Cajero Automatico UnizarBank"
+           DISPLAY "Cajero Automatico UnizarBank" LINE 2 COL 26
                WITH FOREGROUND-COLOR IS 1.
 
            MOVE FUNCTION CURRENT-DATE TO CAMPOS-FECHA.
 
-           DISPLAY(4 32) DIA.
-           DISPLAY(4 34) "-".
-           DISPLAY(4 35) MES.
-           DISPLAY(4 37) "-".
-           DISPLAY(4 38) ANO.
-           DISPLAY(4 44) HORAS.
-           DISPLAY(4 46) ":".
-           DISPLAY(4 47) MINUTOS.
+           DISPLAY DIA LINE 4 COL 32.
+           DISPLAY "-" LINE 4 COL 34.
+           DISPLAY MES LINE 4 COL 35.
+           DISPLAY "-" LINE 4 COL 37.
+           DISPLAY ANO LINE 4 COL 38.
+           DISPLAY HORAS LINE 4 COL 44.
+           DISPLAY ":" LINE 4 COL 46.
+           DISPLAY MINUTOS LINE 4 COL 47.
 
        PCONSULTA-SALDO.
            OPEN INPUT F-MOVIMIENTOS.
-           IF FSM <> 30
+           IF FSM <> 00
                GO TO PSYS-ERR.
 
            MOVE 0 TO LAST-MOV-NUM.
@@ -124,33 +124,33 @@
        LAST-MOV-FOUND.
            CLOSE F-MOVIMIENTOS.
 
-           DISPLAY(8 30) "Consulta de saldo".
-           DISPLAY(10 19) "El saldo de tu cuenta".
-           DISPLAY(10 41) TNUM.
-           DISPLAY(10 58) "es".
+           DISPLAY "Consulta de saldo" LINE 8 COL 30.
+           DISPLAY "El saldo de tu cuenta" LINE 10 COL 19.
+           DISPLAY TNUM LINE 10 COL 41.
+           DISPLAY "es" LINE 10 COL 58.
 
            IF LAST-MOV-NUM = 0
                GO TO NO-MOVIMIENTOS.
 
            MOVE LAST-MOV-NUM TO MOV-NUM.
            OPEN INPUT F-MOVIMIENTOS.
-           IF FSM <> 30
+           IF FSM <> 00
                GO TO PSYS-ERR.
 
            READ F-MOVIMIENTOS INVALID KEY GO PSYS-ERR.
            DISPLAY HAY-SALDO-DISPLAY.
 
            CLOSE F-MOVIMIENTOS.
-           DISPLAY(24 33) "Enter - Aceptar".
+           DISPLAY "Enter - Aceptar" LINE 24 COL 33.
            GO TO EXIT-ENTER.
 
        NO-MOVIMIENTOS.
-           DISPLAY(12 34) "0".
-           DISPLAY(12 35) ".".
-           DISPLAY(12 36) "00".
-           DISPLAY(12 39) "EUR".
+           DISPLAY "0" LINE 12 COL 34.
+           DISPLAY "." LINE 12 COL 35.
+           DISPLAY "00" LINE 12 COL 36.
+           DISPLAY "EUR" LINE 12 COL 39.
 
-           DISPLAY(24 33) "Enter - Aceptar".
+           DISPLAY "Enter - Aceptar" LINE 24 COL 33.
            GO TO EXIT-ENTER.
 
        PSYS-ERR.
@@ -158,16 +158,16 @@
            CLOSE F-MOVIMIENTOS.
 
            PERFORM IMPRIMIR-CABECERA THRU IMPRIMIR-CABECERA.
-           DISPLAY(9 25) "Ha ocurrido un error interno"
+           DISPLAY "Ha ocurrido un error interno" LINE 09 COL 25
                WITH FOREGROUND-COLOR IS BLACK
                     BACKGROUND-COLOR IS RED.
-           DISPLAY(11 32) "Vuelva mas tarde"
+           DISPLAY "Vuelva mas tarde" LINE 11 COL 32
                WITH FOREGROUND-COLOR IS BLACK
                     BACKGROUND-COLOR IS RED.
-           DISPLAY(24 33) "Enter - Aceptar".
+           DISPLAY "Enter - Aceptar" LINE 24 COL 33.
 
        EXIT-ENTER.
-           ACCEPT(24 80) PRESSED-KEY
+            ACCEPT PRESSED-KEY WITH NO ECHO LINE 24 COL 80
            IF ENTER-PRESSED
                EXIT PROGRAM
            ELSE

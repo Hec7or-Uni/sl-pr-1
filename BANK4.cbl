@@ -120,27 +120,27 @@
            SET ENVIRONMENT 'COB_SCREEN_EXCEPTIONS' TO 'Y'.
 
            DISPLAY BLANK-SCREEN.
-           DISPLAY(2 26) "Cajero Automatico UnizarBank"
+           DISPLAY "Cajero Automatico UnizarBank" LINE 2 COL 26
                WITH FOREGROUND-COLOR IS 1.
 
 
            MOVE FUNCTION CURRENT-DATE TO CAMPOS-FECHA.
 
-           DISPLAY(4 32) DIA.
-           DISPLAY(4 34) "-".
-           DISPLAY(4 35) MES.
-           DISPLAY(4 37) "-".
-           DISPLAY(4 38) ANO.
-           DISPLAY(4 44) HORAS.
-           DISPLAY(4 46) ":".
-           DISPLAY(4 47) MINUTOS.
+           DISPLAY DIA LINE 4 COL 32.
+           DISPLAY "-" LINE 4 COL 34.
+           DISPLAY MES LINE 4 COL 35.
+           DISPLAY "-" LINE 4 COL 37.
+           DISPLAY ANO LINE 4 COL 38.
+           DISPLAY HORAS LINE 4 COL 44.
+           DISPLAY ":" LINE 4 COL 46.
+           DISPLAY MINUTOS LINE 4 COL 47.
 
 
 
 
        CONSULTA-ULTIMO-MOVIMIENTO SECTION.
            OPEN I-O F-MOVIMIENTOS.
-           IF FSM <> 30
+           IF FSM <> 00
               GO TO PSYS-ERR.
 
            MOVE 0 TO LAST-MOV-NUM.
@@ -161,7 +161,7 @@
 
        CONSULTA-SALDO-USUARIO SECTION.
            OPEN INPUT F-MOVIMIENTOS.
-           IF FSM <> 30
+           IF FSM <> 00
                GO TO PSYS-ERR.
 
            MOVE 0 TO LAST-USER-MOV-NUM.
@@ -190,7 +190,7 @@
            MOVE LAST-USER-MOV-NUM TO MOV-NUM.
 
            OPEN INPUT F-MOVIMIENTOS.
-           IF FSM <> 30
+           IF FSM <> 00
                GO TO PSYS-ERR.
 
            READ F-MOVIMIENTOS INVALID KEY GO TO PSYS-ERR.
@@ -209,17 +209,17 @@
            INITIALIZE EURENT-USUARIO.
            INITIALIZE EURDEC-USUARIO.
 
-           DISPLAY(24 1) "Enter - Aceptar".
-           DISPLAY(24 66) "ESC - Cancelar".
+           DISPLAY "Enter - Aceptar" LINE 24 COL 1.
+           DISPLAY "ESC - Cancelar" LINE 24 COL 66.
 
-           DISPLAY(8 30) "Retirar efectivo".
-           DISPLAY(10 19) "Saldo Actual: ".
+           DISPLAY "Retirar efectivo" LINE 8 COL 30.
+           DISPLAY "Saldo Actual: " LINE 10 COL 19.
 
            DISPLAY SALDO-DISPLAY.
 
-           DISPLAY(11 19) "Indique la cantidad:         ".
-           DISPLAY(11 47) ".".
-           DISPLAY(11 51) "EUR".
+           DISPLAY "Indique la cantidad:         " LINE 11 COL 19.
+           DISPLAY "." LINE 11 COL 47.
+           DISPLAY "EUR" LINE 11 COL 51.
 
            ACCEPT ENTRADA-USUARIO ON EXCEPTION
            IF ESC-PRESSED THEN
@@ -232,7 +232,7 @@
                                      + EURDEC-USUARIO.
 
            IF CENT-IMPOR-USER > CENT-SALDO-USER THEN
-               DISPLAY(15 19) "Indique una cantidad menor!!"
+               DISPLAY "Indique una cantidad menor!!"  LINE 15 COL 19
                    WITH BACKGROUND-COLOR RED
                GO TO PANTALLA-RETIRADA
            END-IF.
@@ -243,7 +243,7 @@
        INSERTAR-MOVIMIENTO SECTION.
 
            OPEN I-O F-MOVIMIENTOS.
-           IF FSM <> 30
+           IF FSM <> 00
               GO TO PSYS-ERR.
 
            SUBTRACT CENT-IMPOR-USER FROM CENT-SALDO-USER.
@@ -279,13 +279,13 @@
 
        FINALIZACION SECTION.
            PERFORM IMPRIMIR-CABECERA THRU IMPRIMIR-CABECERA.
-           DISPLAY(8 30) "Retirar efectivo".
-           DISPLAY(10 19) "Por favor, retire los billetes".
-           DISPLAY(11 17) "El saldo resultante es de:".
+           DISPLAY "Retirar efectivo" LINE 8 COL 30.
+           DISPLAY "Por favor, retire los billetes" LINE 10 COL 19.
+           DISPLAY "El saldo resultante es de:" LINE 11 COL 17.
 
            DISPLAY SALDO-DISPLAY-FINAL.
 
-           DISPLAY(24 33) "Enter - Aceptar".
+           DISPLAY "Enter - Aceptar" LINE 24 COL 33.
 
            GO TO EXIT-ENTER.
 
@@ -297,16 +297,16 @@
            CLOSE F-MOVIMIENTOS.
 
            PERFORM IMPRIMIR-CABECERA THRU IMPRIMIR-CABECERA.
-           DISPLAY(9 25) "Ha ocurrido un error interno"
+           DISPLAY "Ha ocurrido un error interno" LINE 9 COL 25
                WITH FOREGROUND-COLOR IS BLACK
                     BACKGROUND-COLOR IS RED.
-           DISPLAY(11 32) "Vuelva mas tarde"
+           DISPLAY "Vuelva mas tarde" LINE 11 COL 32
                WITH FOREGROUND-COLOR IS BLACK
                     BACKGROUND-COLOR IS RED.
-           DISPLAY(24 33) "Enter - Aceptar".
+           DISPLAY "Enter - Aceptar"  LINE 24 COL 33.
 
        EXIT-ENTER.
-           ACCEPT(24 80) PRESSED-KEY
+           ACCEPT PRESSED-KEY WITH NO ECHO LINE 24 COL 80
            IF ENTER-PRESSED
                EXIT PROGRAM
            ELSE
