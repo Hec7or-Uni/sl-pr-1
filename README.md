@@ -5,7 +5,7 @@
 | File                   | Description                          | v0  | v0.1 | v1  |
 | ---------------------- | ------------------------------------ | --- | ---- | --- |
 | [BANK1.cbl](BANK1.cbl) | Main                                 | ❌   | ❌    | ✅   |
-| [BANK2.cbl](BANK2.cbl) | 1 - Consultar saldo                  | ❌   | ❌    | ✅   |
+| [BANK2.cbl](BANK2.cbl) | 1 - Consultar saldo                  | ❌   | ⚠️    | ✅   |
 | [BANK3.cbl](BANK3.cbl) | 2 - Consultar movimientos            | ❌   | ❌    | ✅   |
 | [BANK4.cbl](BANK4.cbl) | 3 - Retirar efectivo                 | ❌   | ❌    | ✅   |
 | [BANK5.cbl](BANK5.cbl) | 4 - Ingresar efectivo                | ❌   | ❌    | ✅   |
